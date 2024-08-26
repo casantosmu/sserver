@@ -1,0 +1,12 @@
+{
+  "name": "sserver",
+  "version": "0.0.1",
+  "type": "module",
+  "bin": "./cli.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test --inspect --watch test/server.test.js"
+  }
+}
