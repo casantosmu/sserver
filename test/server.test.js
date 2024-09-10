@@ -35,4 +35,5 @@ test("GET /file.txt with ETag should return 304 if unchanged", async () => {
   });
 
   strictEqual(response.status, 304);
+  strictEqual(response.body, null)
 });

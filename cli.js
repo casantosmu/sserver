@@ -22,7 +22,7 @@ const rootDir = path.resolve(program.processedArgs[0]);
 const port = parseInt(options.port, 10);
 const address = options.bind;
 
-const server = createServer({ rootDir });
+const server = createServer(rootDir);
 server.listen(port, address, () => {
   console.log(`Server listening on http://${address}:${port}`);
   console.log(`Serving files from ${rootDir}`);
