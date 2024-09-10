@@ -6,8 +6,10 @@ test("GET /file.txt should return 200", async () => {
   const response = await request("/file.txt");
 
   strictEqual(response.status, 200);
+  strictEqual(!!response.headers.get("etag"), true);
   strictEqual(response.headers.get("content-type"), "text/plain");
   strictEqual(response.headers.get("content-length"), "40");
+  strictEqual(!!response.body, true);
 });
 
 test("GET /non-file.txt should return 404", async () => {
@@ -35,5 +37,8 @@ test("GET /file.txt with ETag should return 304 if unchanged", async () => {
   });
 
   strictEqual(response.status, 304);
-  strictEqual(response.body, null)
+  strictEqual(response.headers.get("etag"), etag);
+  strictEqual(response.headers.get("content-type"), null);
+  strictEqual(response.headers.get("content-length"), null);
+  strictEqual(response.body, null);
 });
