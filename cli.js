@@ -1,52 +1,29 @@
 #!/usr/bin/env node
 
+import process from "node:process";
+import path from "node:path";
+import { Command } from "commander";
 import { createServer } from "./lib/server.js";
 
-const showHelp = () => {
-  console.log(`
-Usage: sserver [options]
+const program = new Command();
 
-Options:
-  -p, --port <port>          Specify the port to listen on (default: 8080)
-  -b, --bind <address>       Specify the address to bind to (default: 0.0.0.0)
-  -d, --dir <path>           Specify the root directory (default: public)
-  -h, --help                 Show this help message
-`);
-  process.exit(0);
-};
+program
+  .name("sserver")
+  .description("A simple static file server")
+  .argument("[rootDir]", "Root directory to serve files from", process.cwd())
+  .option("-p, --port <port>", "Specify the port to listen on", "8080")
+  .option("-b, --bind <address>", "Specify the address to bind to", "127.0.0.1")
+  .helpOption("-h, --help", "Show help");
 
-let port = 8080;
-let address = "0.0.0.0";
-let rootDir = "public";
+program.parse();
 
-for (let i = 2; i < process.argv.length; i++) {
-  const arg = process.argv[i];
-
-  switch (arg) {
-    case "-p":
-    case "--port":
-      port = parseInt(process.argv[++i], 10);
-      break;
-    case "-b":
-    case "--bind":
-      address = process.argv[++i];
-      break;
-    case "-d":
-    case "--dir":
-      rootDir = process.argv[++i];
-      break;
-    case "-h":
-    case "--help":
-      showHelp();
-      break;
-    default:
-      console.log(`Unknown option: ${arg}`);
-      showHelp();
-      break;
-  }
-}
+const options = program.opts();
+const rootDir = path.resolve(program.processedArgs[0]);
+const port = parseInt(options.port, 10);
+const address = options.bind;
 
 const server = createServer({ rootDir });
 server.listen(port, address, () => {
-  console.log(`Server listening on ${address}:${port}`);
+  console.log(`Server listening on http://${address}:${port}`);
+  console.log(`Serving files from ${rootDir}`);
 });

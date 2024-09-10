@@ -8,5 +8,8 @@
   },
   "scripts": {
     "test": "node --test --inspect --watch test/server.test.js"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
   }
 }
